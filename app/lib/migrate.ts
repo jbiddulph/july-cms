@@ -4,7 +4,14 @@ export async function runMigration() {
   const connectionString = process.env.NETLIFY_DATABASE_URL || process.env.DATABASE_URL;
   
   if (!connectionString) {
-    throw new Error('Database connection string not found');
+    throw new Error('Database connection string not found. Please set NETLIFY_DATABASE_URL or DATABASE_URL environment variable.');
+  }
+
+  // Validate connection string format
+  if (!connectionString.startsWith('postgresql://') && !connectionString.startsWith('postgres://')) {
+    throw new Error(
+      'Database connection string format for neon() should be: postgresql://user:password@host.tld/dbname?option=value'
+    );
   }
 
   const sql = neon(connectionString);

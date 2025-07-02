@@ -2,8 +2,22 @@ import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { pgTable, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 
-// Database connection
-const connectionString = process.env.NETLIFY_DATABASE_URL || process.env.DATABASE_URL || 'postgresql://localhost:5432/dev';
+// Database connection with proper validation
+const connectionString = process.env.NETLIFY_DATABASE_URL || process.env.DATABASE_URL;
+
+if (!connectionString) {
+  throw new Error(
+    'Database connection string not found. Please set NETLIFY_DATABASE_URL or DATABASE_URL environment variable with format: postgresql://user:password@host.tld/dbname'
+  );
+}
+
+// Validate connection string format
+if (!connectionString.startsWith('postgresql://') && !connectionString.startsWith('postgres://')) {
+  throw new Error(
+    'Database connection string format for neon() should be: postgresql://user:password@host.tld/dbname?option=value'
+  );
+}
+
 const sql = neon(connectionString);
 export const db = drizzle(sql);
 
