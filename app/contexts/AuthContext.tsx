@@ -25,7 +25,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const payload = await verifyToken(token);
       if (payload && payload.userId) {
-        const userData = getUserById(payload.userId);
+        const userData = await getUserById(payload.userId);
         if (userData) {
           setUser(userData);
         } else {
