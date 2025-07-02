@@ -1,9 +1,6 @@
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  createdAt: Date;
-}
+import { type User as DbUser } from '../lib/db';
+
+export type User = Omit<DbUser, 'password'>;
 
 export interface AuthContextType {
   user: User | null;

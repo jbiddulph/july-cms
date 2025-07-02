@@ -3,7 +3,8 @@ import { drizzle } from 'drizzle-orm/neon-http';
 import { pgTable, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core';
 
 // Database connection
-const sql = neon(process.env.NETLIFY_DATABASE_URL || process.env.DATABASE_URL || '');
+const connectionString = process.env.NETLIFY_DATABASE_URL || process.env.DATABASE_URL || 'postgresql://localhost:5432/dev';
+const sql = neon(connectionString);
 export const db = drizzle(sql);
 
 // Users table schema
