@@ -7,6 +7,14 @@ async function setupDatabase() {
   if (!connectionString) {
     console.error('❌ Database connection string not found');
     console.log('Please set NETLIFY_DATABASE_URL or DATABASE_URL in your environment variables');
+    console.log('Format should be: postgresql://user:password@host.tld/dbname?option=value');
+    process.exit(1);
+  }
+
+  // Validate connection string format
+  if (!connectionString.startsWith('postgresql://') && !connectionString.startsWith('postgres://')) {
+    console.error('❌ Invalid database connection string format');
+    console.log('Format should be: postgresql://user:password@host.tld/dbname?option=value');
     process.exit(1);
   }
 
