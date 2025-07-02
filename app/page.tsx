@@ -1,196 +1,211 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+'use client';
+
+import Link from 'next/link';
+import { useAuth } from './contexts/AuthContext';
 
 export default function Home() {
+  const { user, logout } = useAuth();
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 dark:from-gray-900 dark:via-gray-800 dark:to-purple-900">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-100">
       {/* Navigation */}
-      <nav className="relative z-10 flex items-center justify-between p-6 lg:px-8">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-lg">J</span>
+      <nav className="bg-white shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between h-16">
+            <div className="flex items-center">
+              <h1 className="text-xl font-bold text-gray-900">July CMS</h1>
+            </div>
+            <div className="flex items-center space-x-4">
+              {user ? (
+                <>
+                  <span className="text-gray-700">Welcome, {user.name}</span>
+                  <Link
+                    href="/dashboard"
+                    className="text-indigo-600 hover:text-indigo-800 font-medium"
+                  >
+                    Dashboard
+                  </Link>
+                  <button
+                    onClick={logout}
+                    className="bg-gray-200 hover:bg-gray-300 text-gray-800 px-4 py-2 rounded-md text-sm font-medium"
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <Link
+                    href="/login"
+                    className="text-indigo-600 hover:text-indigo-800 font-medium"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    href="/register"
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium"
+                  >
+                    Register
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
-          <span className="text-2xl font-bold text-gray-900 dark:text-white">July CMS</span>
-        </div>
-        <div className="hidden md:flex items-center space-x-8">
-          <a href="#features" className="text-gray-600 dark:text-gray-300 hover:text-purple-600 transition-colors">Features</a>
-          <a href="#about" className="text-gray-600 dark:text-gray-300 hover:text-purple-600 transition-colors">About</a>
-          <button className="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 transition-colors">
-            Get Started
-          </button>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <main className="relative">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 pt-20 pb-32">
-          <div className="text-center">
-            <h1 className="text-5xl lg:text-7xl font-bold text-gray-900 dark:text-white mb-8 leading-tight">
-              Manage Your
-              <span className="bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent"> Personal Space</span>
-            </h1>
-            <p className="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 mb-12 max-w-4xl mx-auto leading-relaxed">
-              July CMS is a beautiful and intuitive content management system designed to help you organize, 
-              create, and manage your personal digital space with elegance and ease.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <button className="bg-purple-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-purple-700 transition-all transform hover:scale-105 shadow-lg">
-                Start Creating
-              </button>
-              <button className="border-2 border-purple-600 text-purple-600 dark:text-purple-400 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-all">
-                Learn More
-              </button>
-            </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-gray-900 sm:text-5xl md:text-6xl">
+            <span className="block">July CMS</span>
+            <span className="block text-indigo-600">Authentication Demo</span>
+          </h1>
+          <p className="mt-3 max-w-md mx-auto text-base text-gray-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
+            A comprehensive Next.js authentication system with secure login, registration, 
+            and user management features.
+          </p>
+          <div className="mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8">
+            {user ? (
+              <Link
+                href="/dashboard"
+                className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
+              >
+                Go to Dashboard
+              </Link>
+            ) : (
+              <>
+                <div className="rounded-md shadow">
+                  <Link
+                    href="/register"
+                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10"
+                  >
+                    Get Started
+                  </Link>
+                </div>
+                <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
+                  <Link
+                    href="/login"
+                    className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10"
+                  >
+                    Sign In
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
         </div>
+      </div>
 
-        {/* Features Section */}
-        <section id="features" className="py-24 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-                Everything You Need
-              </h2>
-              <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-                Powerful features designed to make managing your personal content a delightful experience.
-              </p>
-            </div>
+      {/* Features Section */}
+      <div className="bg-white py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="lg:text-center">
+            <h2 className="text-base text-indigo-600 font-semibold tracking-wide uppercase">Features</h2>
+            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">
+              Complete Authentication System
+            </p>
+            <p className="mt-4 max-w-2xl text-xl text-gray-500 lg:mx-auto">
+              Built with modern web technologies and security best practices.
+            </p>
+          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="mt-10">
+            <div className="space-y-10 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-x-8 md:gap-y-10">
               {/* Feature 1 */}
-              <div className="group p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2">
-                <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:bg-purple-200 dark:group-hover:bg-purple-800/50 transition-colors">
-                  <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4" />
-                  </svg>
+              <div className="relative">
+                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                  🔐
                 </div>
-                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Personal Organization</h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Organize your thoughts, ideas, and content in a way that makes sense to you. Create custom categories and tags.
+                <p className="ml-16 text-lg leading-6 font-medium text-gray-900">Secure Authentication</p>
+                <p className="mt-2 ml-16 text-base text-gray-500">
+                  Password hashing with bcrypt and JWT token-based authentication for maximum security.
                 </p>
               </div>
 
               {/* Feature 2 */}
-              <div className="group p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2">
-                <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/50 transition-colors">
-                  <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                  </svg>
+              <div className="relative">
+                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                  👤
                 </div>
-                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Rich Content Editor</h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Write and format your content with a beautiful, distraction-free editor that supports all your creative needs.
+                <p className="ml-16 text-lg leading-6 font-medium text-gray-900">User Registration</p>
+                <p className="mt-2 ml-16 text-base text-gray-500">
+                  Easy registration process with email validation and password confirmation.
                 </p>
               </div>
 
               {/* Feature 3 */}
-              <div className="group p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2">
-                <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:bg-green-200 dark:group-hover:bg-green-800/50 transition-colors">
-                  <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                  </svg>
+              <div className="relative">
+                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                  🛡️
                 </div>
-                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Private & Secure</h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Your personal space is truly yours. All content is stored securely and privately, accessible only to you.
+                <p className="ml-16 text-lg leading-6 font-medium text-gray-900">Protected Routes</p>
+                <p className="mt-2 ml-16 text-base text-gray-500">
+                  Automatic redirection and route protection for authenticated content.
                 </p>
               </div>
 
               {/* Feature 4 */}
-              <div className="group p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2">
-                <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:bg-yellow-200 dark:group-hover:bg-yellow-800/50 transition-colors">
-                  <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
+              <div className="relative">
+                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                  📱
                 </div>
-                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Smart Search</h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Find anything instantly with powerful search capabilities that understand your content and organization.
+                <p className="ml-16 text-lg leading-6 font-medium text-gray-900">Responsive Design</p>
+                <p className="mt-2 ml-16 text-base text-gray-500">
+                  Beautiful, mobile-first design built with Tailwind CSS.
                 </p>
               </div>
 
               {/* Feature 5 */}
-              <div className="group p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2">
-                <div className="w-12 h-12 bg-pink-100 dark:bg-pink-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:bg-pink-200 dark:group-hover:bg-pink-800/50 transition-colors">
-                  <svg className="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17v4a2 2 0 002 2h4M15 7l3 3" />
-                  </svg>
+              <div className="relative">
+                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                  ⚡
                 </div>
-                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Beautiful Themes</h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Customize your space with beautiful themes and layouts that reflect your personal style and preferences.
+                <p className="ml-16 text-lg leading-6 font-medium text-gray-900">Fast & Modern</p>
+                <p className="mt-2 ml-16 text-base text-gray-500">
+                  Built with Next.js 15, React 19, and TypeScript for optimal performance.
                 </p>
               </div>
 
               {/* Feature 6 */}
-              <div className="group p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-xl hover:shadow-2xl transition-all transform hover:-translate-y-2">
-                <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center mb-6 group-hover:bg-indigo-200 dark:group-hover:bg-indigo-800/50 transition-colors">
-                  <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                  </svg>
+              <div className="relative">
+                <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                  🍪
                 </div>
-                <h3 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">Mobile Ready</h3>
-                <p className="text-gray-600 dark:text-gray-300">
-                  Access and manage your content from anywhere, on any device. July CMS works perfectly on desktop, tablet, and mobile.
+                <p className="ml-16 text-lg leading-6 font-medium text-gray-900">Persistent Sessions</p>
+                <p className="mt-2 ml-16 text-base text-gray-500">
+                  Cookie-based session management with automatic token renewal.
                 </p>
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </div>
 
-        {/* CTA Section */}
-        <section className="py-24">
-          <div className="max-w-4xl mx-auto text-center px-6 lg:px-8">
-            <h2 className="text-4xl lg:text-5xl font-bold text-gray-900 dark:text-white mb-8">
-              Ready to Create Your Space?
-            </h2>
-            <p className="text-xl text-gray-600 dark:text-gray-300 mb-12">
-              Join thousands of users who have transformed their digital organization with July CMS.
+      {/* Demo Section */}
+      <div className="bg-gray-50 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <h2 className="text-3xl font-extrabold text-gray-900">Try the Demo</h2>
+            <p className="mt-4 text-lg text-gray-600">
+              Use the demo credentials to test the authentication system:
             </p>
-            <button className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-12 py-4 rounded-xl text-xl font-semibold hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105 shadow-xl">
-              Start Your Journey
-            </button>
-          </div>
-        </section>
-      </main>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 dark:bg-black text-white py-16">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center space-x-2 mb-6">
-                <div className="w-8 h-8 bg-gradient-to-r from-purple-600 to-blue-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">J</span>
-                </div>
-                <span className="text-2xl font-bold">July CMS</span>
+            <div className="mt-6 bg-white rounded-lg shadow p-6 max-w-md mx-auto">
+              <div className="text-left space-y-2">
+                <p><strong>Email:</strong> admin@example.com</p>
+                <p><strong>Password:</strong> admin123</p>
               </div>
-              <p className="text-gray-400 max-w-md">
-                A beautiful and intuitive content management system designed for your personal digital space.
-              </p>
+              <div className="mt-4">
+                <Link
+                  href="/login"
+                  className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-md text-center block"
+                >
+                  Try Demo Login
+                </Link>
+              </div>
             </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Product</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Features</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Documentation</a></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Support</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contact</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Community</a></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 July CMS. All rights reserved.</p>
           </div>
         </div>
-      </footer>
+      </div>
     </div>
   );
 }
