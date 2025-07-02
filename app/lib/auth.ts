@@ -1,21 +1,11 @@
 import bcrypt from 'bcryptjs';
 import { SignJWT, jwtVerify } from 'jose';
-import { User } from '../types/auth';
+import { eq } from 'drizzle-orm';
+import { db, users, type User } from './db';
 
 const secret = new TextEncoder().encode(
   process.env.JWT_SECRET || 'your-secret-key-change-in-production'
 );
-
-// Mock user storage (in production, this would be a database)
-const users: Array<User & { password: string }> = [
-  {
-    id: '1',
-    email: 'admin@example.com',
-    name: 'Admin User',
-    password: '$2a$10$rOzJqODqGbUzKqV0Y5Mlje5Q9N3Q8E9yxXvLQhGl8K9N0Q8E9yxXv', // password: "admin123"
-    createdAt: new Date(),
-  }
-];
 
 export async function hashPassword(password: string): Promise<string> {
   return bcrypt.hash(password, 10);
@@ -42,45 +32,61 @@ export async function verifyToken(token: string): Promise<any> {
   }
 }
 
-export async function authenticateUser(email: string, password: string): Promise<User | null> {
-  const user = users.find(u => u.email === email);
-  if (!user) return null;
+export async function authenticateUser(email: string, password: string): Promise<Omit<User, 'password'> | null> {
+  try {
+    const user = await db.select().from(users).where(eq(users.email, email)).limit(1);
+    
+    if (user.length === 0) return null;
 
-  const isValid = await verifyPassword(password, user.password);
-  if (!isValid) return null;
+    const isValid = await verifyPassword(password, user[0].password);
+    if (!isValid) return null;
 
-  // Return user without password
-  const { password: _, ...userWithoutPassword } = user;
-  return userWithoutPassword;
-}
-
-export async function createUser(email: string, password: string, name: string): Promise<User | null> {
-  // Check if user already exists
-  if (users.find(u => u.email === email)) {
+    // Return user without password
+    const { password: _, ...userWithoutPassword } = user[0];
+    return userWithoutPassword;
+  } catch (error) {
+    console.error('Authentication error:', error);
     return null;
   }
-
-  const hashedPassword = await hashPassword(password);
-  const newUser = {
-    id: (users.length + 1).toString(),
-    email,
-    name,
-    password: hashedPassword,
-    createdAt: new Date(),
-  };
-
-  users.push(newUser);
-
-  // Return user without password
-  const { password: _, ...userWithoutPassword } = newUser;
-  return userWithoutPassword;
 }
 
-export function getUserById(id: string): User | null {
-  const user = users.find(u => u.id === id);
-  if (!user) return null;
+export async function createUser(email: string, password: string, name: string): Promise<Omit<User, 'password'> | null> {
+  try {
+    // Check if user already exists
+    const existingUser = await db.select().from(users).where(eq(users.email, email)).limit(1);
+    if (existingUser.length > 0) {
+      return null;
+    }
 
-  // Return user without password
-  const { password: _, ...userWithoutPassword } = user;
-  return userWithoutPassword;
+    const hashedPassword = await hashPassword(password);
+    const newUser = await db.insert(users).values({
+      email,
+      name,
+      password: hashedPassword,
+    }).returning();
+
+    if (newUser.length === 0) return null;
+
+    // Return user without password
+    const { password: _, ...userWithoutPassword } = newUser[0];
+    return userWithoutPassword;
+  } catch (error) {
+    console.error('User creation error:', error);
+    return null;
+  }
+}
+
+export async function getUserById(id: string): Promise<Omit<User, 'password'> | null> {
+  try {
+    const user = await db.select().from(users).where(eq(users.id, parseInt(id))).limit(1);
+    
+    if (user.length === 0) return null;
+
+    // Return user without password
+    const { password: _, ...userWithoutPassword } = user[0];
+    return userWithoutPassword;
+  } catch (error) {
+    console.error('Get user error:', error);
+    return null;
+  }
 }
