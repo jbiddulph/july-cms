@@ -1,10 +1,6 @@
-// app/actions.ts
-"use server";
 import { neon } from '@neondatabase/serverless';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { pgTable, serial, text, timestamp, varchar } from 'drizzle-orm/pg-core';
-
-console.log('DATABASE_URL:', process.env.DATABASE_URL);
 
 // Helper function to get database connection
 function createDbConnection() {
@@ -27,8 +23,17 @@ function createDbConnection() {
   return drizzle(sql);
 }
 
-// Export the database connection - it will be created when first imported
-export const db = createDbConnection();
+// Lazy database connection - only created when first accessed
+let _db: ReturnType<typeof createDbConnection> | null = null;
+
+export const db = new Proxy({} as ReturnType<typeof createDbConnection>, {
+  get(target, prop) {
+    if (!_db) {
+      _db = createDbConnection();
+    }
+    return (_db as any)[prop];
+  }
+});
 
 // Users table schema
 export const users = pgTable('users', {
