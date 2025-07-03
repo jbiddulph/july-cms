@@ -15,6 +15,7 @@
   "dependencies": {
     "@neondatabase/serverless": "^1.0.1",
     "bcryptjs": "^2.4.3",
+    "dotenv": "^17.0.1",
     "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.44.2",
     "jose": "^5.2.0",
